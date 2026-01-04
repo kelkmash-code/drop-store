@@ -17,7 +17,6 @@ import {
     Users as UsersIcon,
     Briefcase,
     Calendar,
-    Calendar,
     Code,
     Settings as SettingsIcon
 } from 'lucide-react';
