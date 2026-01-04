@@ -64,8 +64,9 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
 
         if (isAdmin) {
             fetchWorkers();
-            fetchAccounts();
         }
+        // Always fetch accounts (backend handles visibility)
+        fetchAccounts();
 
         // Fetch fruits if needed or pre-load
         fetchFruits();
