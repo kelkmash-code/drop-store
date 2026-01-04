@@ -15,7 +15,7 @@ module.exports = (db) => {
             if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
 
             // Create new session
-            await db.run('INSERT INTO work_sessions (user_id, login_time) VALUES (?, datetime("now"))', [user.id]);
+            await db.run('INSERT INTO work_sessions (user_id, login_time) VALUES (?, CURRENT_TIMESTAMP)', [user.id]);
 
             const token = jwt.sign(
                 { id: user.id, username: user.username, role: user.role },
@@ -43,17 +43,22 @@ module.exports = (db) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             // Close the latest open session for this user
             const session = await db.get(
-                'SELECT id FROM work_sessions WHERE user_id = ? AND logout_time IS NULL ORDER BY id DESC LIMIT 1',
+                'SELECT id, login_time FROM work_sessions WHERE user_id = ? AND logout_time IS NULL ORDER BY id DESC LIMIT 1',
                 [decoded.id]
             );
 
             if (session) {
+                // Calculate duration in minutes (JS instead of SQL for compatibility)
+                const loginTime = new Date(session.login_time);
+                const now = new Date();
+                const durationMinutes = Math.round((now - loginTime) / 60000); // ms to minutes
+
                 await db.run(`
                     UPDATE work_sessions 
-                    SET logout_time = datetime('now'),
-                        duration_minutes = (strftime('%s', 'now') - strftime('%s', login_time)) / 60
+                    SET logout_time = CURRENT_TIMESTAMP,
+                        duration_minutes = ?
                     WHERE id = ?
-                `, [session.id]);
+                `, [durationMinutes, session.id]);
             }
             res.json({ success: true });
         } catch (err) {
