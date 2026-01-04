@@ -58,12 +58,14 @@ module.exports = (db) => {
         }
 
         try {
-            const id = await generateOrderId();
-            await db.run(
-                `INSERT INTO local_orders (id, platform, eldorado_ref, client_username, client_password, client_email, order_type, order_link, assigned_worker_id, aldorado_account, accepted_price, notes)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                [id, platform, eldorado_ref, client_username, client_password, client_email, order_type || 'Leveling', order_link, assigned_worker_id, aldorado_account, accepted_price, notes]
+            // Let DB handle ID generation (AutoIncrement/Serial)
+            const result = await db.run(
+                `INSERT INTO local_orders (platform, eldorado_ref, client_username, client_password, client_email, order_type, order_link, assigned_worker_id, aldorado_account, accepted_price, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [platform, eldorado_ref, client_username, client_password, client_email, order_type || 'Leveling', order_link, assigned_worker_id, aldorado_account, accepted_price, notes]
             );
+
+            // Get the auto-generated ID
+            const id = result.lastID;
 
             await db.run(
                 'INSERT INTO order_history (order_id, status_to, changed_by) VALUES (?, ?, ?)',

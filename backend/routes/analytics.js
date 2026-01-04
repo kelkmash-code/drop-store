@@ -11,7 +11,7 @@ module.exports = (db) => {
         // We will match just the YYYY-MM-DD part.
 
         const orders = await db.all(
-            `SELECT * FROM local_orders WHERE date(created_at) = date(?)`,
+            `SELECT * FROM local_orders WHERE CAST(created_at AS DATE) = CAST(? AS DATE)`,
             [date]
         );
 

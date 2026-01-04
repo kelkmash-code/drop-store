@@ -155,7 +155,61 @@ async function setupDb() {
     console.log('Default admin user created: admin / admin123');
   }
 
+  // SEEDING: Blox Fruits (If empty)
+  const fruitCount = await db.get('SELECT COUNT(*) as c FROM blox_fruits');
+  if (fruitCount && (fruitCount.c === 0 || fruitCount.count === 0)) { // Handle sqlite/pg return differences
+    console.log('Seeding Blox Fruits...');
+    const fruits = [
+      { name: 'Rocket', rarity: 'Common', price: 50 },
+      { name: 'Spin', rarity: 'Common', price: 180 },
+      { name: 'Chop', rarity: 'Common', price: 300 },
+      { name: 'Spring', rarity: 'Common', price: 600 },
+      { name: 'Bomb', rarity: 'Common', price: 800 },
+      { name: 'Smoke', rarity: 'Common', price: 1200 },
+      { name: 'Spike', rarity: 'Common', price: 1500 },
+      { name: 'Flame', rarity: 'Uncommon', price: 2500 },
+      { name: 'Ice', rarity: 'Uncommon', price: 3000 },
+      { name: 'Sand', rarity: 'Uncommon', price: 4000 },
+      { name: 'Dark', rarity: 'Uncommon', price: 5000 },
+      { name: 'Light', rarity: 'Rare', price: 6500 },
+      { name: 'Magma', rarity: 'Rare', price: 8000 },
+      { name: 'Rubber', rarity: 'Rare', price: 9000 },
+      { name: 'Barrier', rarity: 'Rare', price: 10000 },
+      { name: 'Ghost', rarity: 'Rare', price: 12000 },
+      { name: 'Portal', rarity: 'Legendary', price: 15000 },
+      { name: 'Rumble', rarity: 'Legendary', price: 18000 },
+      { name: 'Paw', rarity: 'Legendary', price: 20000 },
+      { name: 'Blizzard', rarity: 'Legendary', price: 22000 },
+      { name: 'Gravity', rarity: 'Legendary', price: 25000 },
+      { name: 'Dough', rarity: 'Mythical', price: 30000 },
+      { name: 'Shadow', rarity: 'Mythical', price: 32000 },
+      { name: 'Venom', rarity: 'Mythical', price: 35000 },
+      { name: 'Control', rarity: 'Mythical', price: 38000 },
+      { name: 'Spirit', rarity: 'Mythical', price: 40000 },
+      { name: 'Dragon', rarity: 'Mythical', price: 50000 },
+      { name: 'Leopard', rarity: 'Mythical', price: 60000 },
+      { name: 'Kitsune', rarity: 'Mythical', price: 80000 },
+      { name: 'T-Rex', rarity: 'Mythical', price: 90000 }
+    ];
+    for (const f of fruits) {
+      await db.run('INSERT INTO blox_fruits (name, rarity, price, quantity) VALUES (?, ?, ?, 0)', [f.name, f.rarity, f.price]);
+    }
+  }
+
+  // SEEDING: Scripts (If empty)
+  const scriptCount = await db.get('SELECT COUNT(*) as c FROM scripts');
+  if (scriptCount && (scriptCount.c === 0 || scriptCount.count === 0)) {
+    console.log('Seeding Sample Script...');
+    await db.run(`INSERT INTO scripts (name, content, source_link, notes) VALUES (?, ?, ?, ?)`, [
+      'Auto Farm Level',
+      'loadstring(game:HttpGet("https://raw.githubusercontent.com/Example/Script/main/loader.lua"))()',
+      'https://script-hub.com',
+      'Best auto farm for leveling up quickly.'
+    ]);
+  }
+
   return db;
 }
 
 module.exports = setupDb;
+```
