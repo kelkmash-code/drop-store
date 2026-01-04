@@ -17,7 +17,9 @@ import {
     Users as UsersIcon,
     Briefcase,
     Calendar,
-    Code
+    Calendar,
+    Code,
+    Settings as SettingsIcon
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -39,7 +41,8 @@ const Sidebar = () => {
             { to: '/users', icon: <UsersIcon size={20} />, label: 'Users' },
             { to: '/accounts', icon: <Briefcase size={20} />, label: 'Accounts' },
             { to: '/expenses', icon: <Wallet size={20} />, label: 'Expenses' },
-            { to: '/analytics', icon: <BarChart3 size={20} />, label: 'Analytics' }
+            { to: '/analytics', icon: <BarChart3 size={20} />, label: 'Analytics' },
+            { to: '/settings', icon: <SettingsIcon size={20} />, label: 'Settings' }
         );
     }
 

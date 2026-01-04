@@ -311,7 +311,7 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
                                                 No fruits currently in stock. Please add stock in the Blox Fruits page.
                                             </p>
                                         ) : (
-                                            fruits
+                                            (fruits || [])
                                                 .filter(fruit => fruit.quantity > 0)
                                                 .map(fruit => (
                                                     <div
@@ -444,12 +444,30 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
                     )}
                 </form>
 
-                <div className="modal-footer">
-                    <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
-                    <button type="button" onClick={handleSave} className="btn-primary">
-                        <Save size={18} style={{ marginRight: '6px' }} />
-                        Save Changes
-                    </button>
+                <div className="modal-footer" style={{ justifyContent: 'space-between' }}>
+                    {order && isAdmin ? (
+                        <button type="button" onClick={async () => {
+                            if (confirm('Are you sure you want to delete this order? This cannot be undone.')) {
+                                try {
+                                    await axios.delete(`${API_URL}/orders/${order.id}`);
+                                    onOrderUpdated();
+                                    onClose();
+                                } catch (err) {
+                                    alert('Failed to delete order');
+                                }
+                            }
+                        }} className="btn-secondary" style={{ color: '#ef4444', borderColor: '#ef444433' }}>
+                            Delete
+                        </button>
+                    ) : <div></div>}
+
+                    <div className="flex gap-2">
+                        <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
+                        <button type="button" onClick={handleSave} className="btn-primary">
+                            <Save size={18} style={{ marginRight: '6px' }} />
+                            Save Changes
+                        </button>
+                    </div>
                 </div>
             </div>
             {/* Upload Modal Overlay */}

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Settings from './pages/Settings';
 
 const PrivateRoute = ({ children }) => {
     const { user, loading } = useAuth();
@@ -20,7 +21,10 @@ function App() {
                         path="/*"
                         element={
                             <PrivateRoute>
-                                <Dashboard />
+                                <Routes>
+                                    <Route path="/settings" element={<Settings />} />
+                                    <Route path="/*" element={<Dashboard />} />
+                                </Routes>
                             </PrivateRoute>
                         }
                     />

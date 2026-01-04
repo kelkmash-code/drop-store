@@ -275,5 +275,26 @@ module.exports = (db) => {
         }
     });
 
+    // DELETE Order (Admin only)
+    router.delete('/:id', auth, async (req, res) => {
+        if (req.user.role !== 'admin') return res.status(403).json({ error: 'Admin only' });
+
+        try {
+            const { id } = req.params;
+
+            // Delete dependent records first
+            await db.run('DELETE FROM order_history WHERE order_id = ?', [id]);
+            await db.run('DELETE FROM fruit_orders WHERE local_order_id = ?', [id]);
+
+            // Delete the order
+            await db.run('DELETE FROM local_orders WHERE id = ?', [id]);
+
+            res.json({ success: true });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Server error' });
+        }
+    });
+
     return router;
 };

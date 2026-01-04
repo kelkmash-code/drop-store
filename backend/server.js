@@ -23,6 +23,7 @@ async function startServer() {
     const campaignRoutes = require('./routes/campaigns')(db);
     const accountRoutes = require('./routes/accounts')(db);
     const scriptsRoutes = require('./routes/scripts')(db);
+    const adminRoutes = require('./routes/admin')(db);
 
     const path = require('path');
 
@@ -35,6 +36,7 @@ async function startServer() {
     app.use('/api/expenses', expenseRoutes);
     app.use('/api/accounts', accountRoutes);
     app.use('/api/scripts', scriptsRoutes);
+    app.use('/api/admin', adminRoutes);
 
     // Serve static files from React app
     app.use(express.static(path.join(__dirname, '../frontend/dist')));
