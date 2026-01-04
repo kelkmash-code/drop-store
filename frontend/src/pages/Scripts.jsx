@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { Plus, Trash2, Copy, ExternalLink, Code, Save, X, Search, Check } from 'lucide-react';
+import { Plus, Trash2, Search, ExternalLink, Code2, Save, FileText } from 'lucide-react';
 import './Scripts.css'; // Import the new CSS file
 
 const Scripts = () => {
-    const { user } = useAuth();
+    const { user, API_URL } = useAuth();
     const [scripts, setScripts] = useState([]);
     const [filteredScripts, setFilteredScripts] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -33,7 +33,7 @@ const Scripts = () => {
     const fetchScripts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/scripts', {
+            const res = await axios.get(`${API_URL}/scripts`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setScripts(res.data);
@@ -48,7 +48,7 @@ const Scripts = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.post('http://localhost:5000/api/scripts', formData, {
+            await axios.post(`${API_URL}/scripts`, formData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setShowModal(false);
@@ -65,7 +65,7 @@ const Scripts = () => {
         if (!window.confirm('Are you sure you want to delete this script?')) return;
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5000/api/scripts/${id}`, {
+            await axios.delete(`${API_URL}/scripts/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             fetchScripts();

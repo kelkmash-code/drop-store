@@ -9,7 +9,9 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const API_URL = 'http://localhost:5000/api';
+    // Use relative path '/api' for production (same domain), or env var for dev
+    // Use relative path '/api' for production, or localhost for local dev if env not set
+    const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:5000/api' : '/api');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
