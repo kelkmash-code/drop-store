@@ -157,7 +157,8 @@ async function setupDb() {
 
   // SEEDING: Blox Fruits (If empty)
   const fruitCount = await db.get('SELECT COUNT(*) as c FROM blox_fruits');
-  if (fruitCount && (fruitCount.c === 0 || fruitCount.count === 0)) { // Handle sqlite/pg return differences
+  // Postgres returns count as string '0', SQLite as number 0. Use == for loose check.
+  if (fruitCount && (fruitCount.c == 0 || fruitCount.count == 0)) {
     console.log('Seeding Blox Fruits...');
     const fruits = [
       { name: 'Rocket', rarity: 'Common', price: 50, image: 'https://placehold.co/64/orange/white?text=Rocket' },
@@ -198,7 +199,7 @@ async function setupDb() {
 
   // SEEDING: Scripts (If empty)
   const scriptCount = await db.get('SELECT COUNT(*) as c FROM scripts');
-  if (scriptCount && (scriptCount.c === 0 || scriptCount.count === 0)) {
+  if (scriptCount && (scriptCount.c == 0 || scriptCount.count == 0)) {
     console.log('Seeding Sample Script...');
     await db.run(`INSERT INTO scripts (name, content, source_link, notes) VALUES (?, ?, ?, ?)`, [
       'Auto Farm Level',
