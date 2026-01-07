@@ -156,7 +156,7 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
             });
             setShowUpload(false);
             setScreenshot(null);
-            onOrderUpdated();
+            if (onSuccess) onSuccess();
             onClose();
         } catch (err) {
             console.error(err);
@@ -450,7 +450,7 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
                             if (confirm('Are you sure you want to delete this order? This cannot be undone.')) {
                                 try {
                                     await axios.delete(`${API_URL}/orders/${order.id}`);
-                                    onOrderUpdated();
+                                    if (onSuccess) onSuccess();
                                     onClose();
                                 } catch (err) {
                                     alert('Failed to delete order');
