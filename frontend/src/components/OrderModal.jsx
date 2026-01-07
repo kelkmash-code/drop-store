@@ -246,7 +246,7 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
                                     placeholder="Which account took the order?"
                                 />
                                 <datalist id="accounts-list">
-                                    {accounts.map((acc, i) => (
+                                    {(accounts || []).map((acc, i) => (
                                         <option key={i} value={acc.name} />
                                     ))}
                                 </datalist>
@@ -381,7 +381,7 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
                                                     <span className="worker-name">Unassigned</span>
                                                 </div>
                                             </div>
-                                            {workers.map(w => (
+                                            {(workers || []).map(w => (
                                                 <div
                                                     key={w.id}
                                                     className={`worker-option ${formData.assigned_worker_id === w.id ? 'selected' : ''}`}
@@ -427,7 +427,7 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
                         </div>
                     ) : (
                         <div className="history-list">
-                            {history.map((h, i) => (
+                            {(history || []).map((h, i) => (
                                 <div key={i} className="history-item">
                                     <div className="history-dot"></div>
                                     <div className="history-content">
