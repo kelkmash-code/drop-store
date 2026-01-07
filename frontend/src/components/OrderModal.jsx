@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { X, Save, History as HistoryIcon } from 'lucide-react';
+import { X, Save, History as HistoryIcon, Edit2 } from 'lucide-react';
 import ErrorBoundary from './ErrorBoundary';
 
 const OrderModalContent = ({ order, onClose, onSuccess }) => {
