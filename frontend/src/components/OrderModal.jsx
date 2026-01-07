@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { X, Save, History as HistoryIcon } from 'lucide-react';
+import ErrorBoundary from './ErrorBoundary';
 
-const OrderModal = ({ order, onClose, onSuccess }) => {
+const OrderModalContent = ({ order, onClose, onSuccess }) => {
+
     const { API_URL, user } = useAuth();
     const isAdmin = user?.role === 'admin';
 
@@ -306,7 +308,7 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
                                 <div className="form-group full-width">
                                     <label>Select Available Fruit</label>
                                     <div className="fruit-selection-grid">
-                                        {fruits.filter(f => f.quantity > 0).length === 0 ? (
+                                        {(fruits || []).filter(f => f.quantity > 0).length === 0 ? (
                                             <p className="text-muted" style={{ padding: '1rem', textAlign: 'center', gridColumn: '1/-1' }}>
                                                 No fruits currently in stock. Please add stock in the Blox Fruits page.
                                             </p>
@@ -506,5 +508,11 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
         </div>
     );
 };
+
+const OrderModal = (props) => (
+    <ErrorBoundary>
+        <OrderModalContent {...props} />
+    </ErrorBoundary>
+);
 
 export default OrderModal;
