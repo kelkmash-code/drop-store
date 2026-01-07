@@ -388,7 +388,7 @@ const OrderModal = ({ order, onClose, onSuccess }) => {
                                                     onClick={() => setFormData({ ...formData, assigned_worker_id: w.id })}
                                                 >
                                                     <div className="worker-avatar">
-                                                        {w.username.substring(0, 2).toUpperCase()}
+                                                        {(w.username || 'User').substring(0, 2).toUpperCase()}
                                                     </div>
                                                     <span className="worker-name">{w.username}</span>
                                                     <span className="worker-role">{w.role}</span>

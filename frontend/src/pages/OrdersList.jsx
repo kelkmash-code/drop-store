@@ -177,7 +177,7 @@ const OrdersList = ({ filter }) => {
                                             </div>
                                         </td>
                                         {user?.role === 'admin' && (
-                                            <td className="price-cell">${order.accepted_price.toFixed(2)}</td>
+                                            <td className="price-cell">${Number(order.accepted_price || 0).toFixed(2)}</td>
                                         )}
                                         <td className="date-cell">{new Date(order.created_at).toLocaleDateString()}</td>
                                         <td>
