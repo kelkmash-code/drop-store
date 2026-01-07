@@ -155,6 +155,16 @@ async function setupDb() {
     console.log('Default admin user created: admin / admin123');
   }
 
+  // SELF-HEALING MIGRATION: Auto-add 'aldorado_account' if missing
+  try {
+    console.log('Checking for aldorado_account column...');
+    await db.run('ALTER TABLE local_orders ADD COLUMN aldorado_account TEXT');
+    console.log('Migration Success: Added aldorado_account to local_orders');
+  } catch (err) {
+    // Ignore error if column already exists (common behavior in restarts)
+    // console.log('Migration Note: Column likely exists or not needed.'); 
+  }
+
   // SEEDING: Blox Fruits (If empty)
   const fruitCount = await db.get('SELECT COUNT(*) as c FROM blox_fruits');
   // Postgres returns count as string '0', SQLite as number 0. Use == for loose check.
