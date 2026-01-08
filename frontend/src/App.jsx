@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Settings from './pages/Settings';
+import ChatWidget from './components/ChatWidget'; // Import Chat
 
 const PrivateRoute = ({ children }) => {
     const { user, loading } = useAuth();
@@ -25,6 +26,7 @@ function App() {
                                     <Route path="/settings" element={<Settings />} />
                                     <Route path="/*" element={<Dashboard />} />
                                 </Routes>
+                                <ChatWidget /> {/* Add Chat Overlay */}
                             </PrivateRoute>
                         }
                     />
