@@ -147,6 +147,15 @@ async function setupDb() {
     created_at ${datetime}
   `);
 
+  await createTable('messages', `
+    id ${autoInc},
+    sender_id INTEGER NOT NULL,
+    channel TEXT DEFAULT 'global',
+    content TEXT NOT NULL,
+    created_at ${datetime},
+    FOREIGN KEY (sender_id) REFERENCES users(id)
+  `);
+
   // Create default admin if not exists
   const adminExists = await db.get('SELECT * FROM users WHERE username = ?', ['admin']);
   if (!adminExists) {

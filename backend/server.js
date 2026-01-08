@@ -35,7 +35,9 @@ async function startServer() {
     app.use('/api/campaigns', campaignRoutes);
     app.use('/api/expenses', expenseRoutes);
     app.use('/api/accounts', accountRoutes);
+    app.use('/api/accounts', accountRoutes);
     app.use('/api/scripts', scriptsRoutes);
+    app.use('/api/chat', require('./routes/chat')(db));
     app.use('/api/admin', adminRoutes);
 
     // Serve static files from React app
